@@ -7,6 +7,8 @@ pipeline mechanics, not to understanding the code being tested.
 """
 
 def greet(name):
+    x:int|str="Hello"
+    test_variable:str|None=name
     if not name:
         return "Hello, stranger!"
     return f"Hello, {name}!"

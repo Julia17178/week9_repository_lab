@@ -1,17 +1,25 @@
-# Week 9 lab — the workflow file the class builds together, line by line.
-name: Run Tests                 # <- WORKFLOW: the whole file is one workflow
+# Week 10 lab — Multiply Your Environments
+name: Run Tests
 
-on: [push]                      # <- EVENT (TRIGGER): runs on every push
+on: [push]
 
-jobs:                           # <- JOB: a named unit of work
+jobs:
   test:
-    runs-on: ubuntu-latest      # <- RUNNER: the machine that executes this job
-    steps:                      # <- STEPS: individual tasks inside the job
-      - uses: actions/checkout@v4      # <- ACTION: a reusable, pre-packaged step
-      - uses: actions/setup-python@v5  # <- ACTION
+    runs-on: ubuntu-latest
+    # 👇 THIS STRATEGY BLOCK TELLS GITHUB TO RUN MULTIPLE VERSIONS IN PARALLEL
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      # 👇 MULTIPLY: THIS PLUGS IN THE VERSIONS FROM YOUR MATRIX
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - run: pip install pytest        # <- STEP (a plain shell command)
+          python-version: ${{ matrix.python-version }}
+          
+      - run: pip install pytest
       - run: |
           cd week9_pipeline_lab
-          pytest                        # <- STEP (a plain shell command)
+          pytest
